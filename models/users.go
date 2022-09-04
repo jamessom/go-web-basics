@@ -24,3 +24,29 @@ func (model UsersModel) Insert(user *User) error {
 		&user.ID, &user.CreatedAt,
 	)
 }
+
+func (model UsersModel) All() ([]User, error) {
+	var users []User
+	query := `SELECT * FROM users`
+
+	rows, err := model.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var user User
+		err = rows.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}

@@ -21,17 +21,27 @@ func main() {
 	userModel := models.UsersModel{
 		DB: db,
 	}
-	user := models.User{
-		Name: "James",
-		Email: "james@a.com",
+
+	for i := 0; i < 100; i++ {
+		user := models.User{
+			Name: fmt.Sprintf("User %d", i),
+			Email: fmt.Sprintf("user%d@example.com", i),
+		}
+
+		err = userModel.Insert(&user)
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
-	err = userModel.Insert(&user)
+	users, err := userModel.All()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	fmt.Printf("Created user with ID %d\n", user.ID)
+	for _, user := range users {
+		fmt.Printf("%d: %s %s\n", user.ID, user.Name, user.Email)
+	}
 }
 
 func connectToDb(dsn string) (*sql.DB, error) {
