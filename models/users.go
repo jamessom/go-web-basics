@@ -25,28 +25,37 @@ func (model UsersModel) Insert(user *User) error {
 	)
 }
 
-func (model UsersModel) All() ([]User, error) {
+func (model UsersModel) All(filter Filter) ([]User, Metadata, error) {
 	var users []User
-	query := `SELECT * FROM users`
+	query := `SELECT
+							COUNT(*) OVER(),
+							id, name, email, created_at
+						FROM
+							users
+						LIMIT
+							$1
+						OFFSET
+							$2`
 
-	rows, err := model.DB.Query(query)
+	rows, err := model.DB.Query(query, filter.Limit(), filter.Offset())
 	if err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
+	var totalRec int
 	for rows.Next() {
 		var user User
-		err = rows.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt)
+		err = rows.Scan(&totalRec, &user.ID, &user.Name, &user.Email, &user.CreatedAt)
 		if err != nil {
-			return nil, err
+			return nil, Metadata{}, err
 		}
 
 		users = append(users, user)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
-	return users, nil
+	return users, ComputeMetadata(totalRec, filter.Page, filter.PageSize), nil
 }

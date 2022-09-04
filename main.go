@@ -34,7 +34,11 @@ func main() {
 		}
 	}
 
-	users, err := userModel.All()
+	filter := models.Filter{
+		PageSize: 2,
+		Page: 2,
+	}
+	users, _, err := userModel.All(filter)
 	if err != nil {
 		log.Fatalln(err)
 	}
