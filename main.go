@@ -9,6 +9,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type application struct {
+	Models models.Models
+}
+
 func main() {
 
 	dns := "postgres://gopguser:gopgpass@go-db.gowithdockercompose.com/gopgdb?sslmode=disable"
@@ -18,33 +22,15 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	userModel := models.UsersModel{
-		DB: db,
+	app := application{
+		Models: models.NewModel(db),
 	}
 
-	for i := 0; i < 100; i++ {
-		user := models.User{
-			Name: fmt.Sprintf("User %d", i),
-			Email: fmt.Sprintf("user%d@example.com", i),
-		}
+	fmt.Println("Starting application")
 
-		err = userModel.Insert(&user)
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}
-
-	filter := models.Filter{
-		PageSize: 2,
-		Page: 2,
-	}
-	users, _, err := userModel.All(filter)
+	err = app.server()
 	if err != nil {
 		log.Fatalln(err)
-	}
-
-	for _, user := range users {
-		fmt.Printf("%d: %s %s\n", user.ID, user.Name, user.Email)
 	}
 }
 

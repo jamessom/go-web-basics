@@ -7,7 +7,11 @@ type Filter struct {
 }
 
 type Metadata struct {
-	CurrentPage, PageSize, FirstPage, LastPage, TotalRecords int
+	CurrentPage int `json:"current_page"`
+	PageSize int `json:"page_size"`
+	FirstPage int `json:"first_page"`
+	LastPage int `json:"last_page"`
+	TotalRecords int `json:"total_records"`
 }
 
 func (filter Filter) Limit() int {
