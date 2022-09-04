@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  go-db.gowithdockercompose.com:
+    container_name: db-go-with-docker-compose
+    image: queirozjamessom/go-with-docker-compose/db
+    build:
+      context: ./container/database
+      dockerfile: Dockerfile
+    volumes: ["./container/database/data:/var/lib/postgresql/data"]
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: gopguser
+      POSTGRES_PASSWORD: gopgpass
+      POSTGRES_DB: gopgdb
