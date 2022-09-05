@@ -1,16 +1,18 @@
-version: '3'
+version: '3.9'
 
 services:
-
-  go-db.gowithdockercompose.com:
-    container_name: db-go-with-docker-compose
-    image: queirozjamessom/go-with-docker-compose/db
+  go-db.gowebbasics.com:
+    container_name: db-gowebbasics
+    image: queirozjamessom/gowebbasics/db
+    volumes: ["./container/database/data:/var/lib/postgresql/data"]
+    hostname: go-db.gowebbasics.com
+    ports: ["5432:5432"]
+    networks: ["gowebbasics"]
     build:
       context: ./container/database
       dockerfile: Dockerfile
-    volumes: ["./container/database/data:/var/lib/postgresql/data"]
-    ports: ["5432:5432"]
     environment:
       POSTGRES_USER: gopguser
       POSTGRES_PASSWORD: gopgpass
       POSTGRES_DB: gopgdb
+
