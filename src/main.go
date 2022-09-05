@@ -3,8 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"go-with-docker-compose/models"
 	"log"
+
+	"github.com/jamessom/go-web-basics/models"
 
 	_ "github.com/lib/pq"
 )
@@ -15,7 +16,7 @@ type application struct {
 
 func main() {
 
-	dns := "postgres://gopguser:gopgpass@go-db.gowithdockercompose.com/gopgdb?sslmode=disable"
+	dns := "postgres://gopguser:gopgpass@go-db.gowebbasics.com/gopgdb?sslmode=disable"
 
 	db, err := connectToDb(dns)
 	if err != nil {

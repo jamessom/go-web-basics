@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"go-with-docker-compose/models"
 	"log"
 	"net/http"
+
+	"github.com/jamessom/go-web-basics/models"
 )
 
 func (app *application) server() error {

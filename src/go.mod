@@ -1,4 +1,4 @@
-module go-with-docker-compose
+module github.com/jamessom/go-web-basics
 
 go 1.18
 
