@@ -16,3 +16,23 @@ services:
       POSTGRES_PASSWORD: gopgpass
       POSTGRES_DB: gopgdb
 
+
+  go-migrate.gowebbasics.com: &basemigrate
+    profiles: ["tools"]
+    image: migrate/migrate
+    entrypoint: "migrate -database postgres://gopguser:gopgpass@go-db.gowebbasics.com/gopgdb?sslmode=disable -path /tmp/migrations"
+    command: up
+    user: 1000:1000
+    links: ["go-db.gowebbasics.com"]
+    volumes: ["./container/database/migrations:/tmp/migrations"]
+    networks: ["gowebbasics"]
+
+  create-migration:
+    <<: *basemigrate
+    entrypoint: migrate create -dir /tmp/migrations -ext sql
+    command: ""
+
+networks:
+  gowebbasics:
+    external: false
+    name: gowebbasics
