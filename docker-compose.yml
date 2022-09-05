@@ -16,6 +16,16 @@ services:
       POSTGRES_PASSWORD: gopgpass
       POSTGRES_DB: gopgdb
 
+  go-app.gowebbasics.com:
+    container_name: app-gowebbasics
+    image: queirozjamessom/gowebbasics/app
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: dev
+    volumes: ["./src:/home/app"]
+    ports: ["8080:8080"]
+    networks: ["gowebbasics"]
 
   go-migrate.gowebbasics.com: &basemigrate
     profiles: ["tools"]

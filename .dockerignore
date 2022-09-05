@@ -1,5 +1,2 @@
-.env
-/bin
 /container/database/data
-/src/vendor
 /src/tmp
